@@ -1,4 +1,4 @@
-# Builds a chainlink environment based on the latest published docker image
+# Builds a chainlink environment based on the specified published docker image version
 
 version: '3.5'
 services:
@@ -6,8 +6,8 @@ services:
     container_name: chainlink-db
     image: postgres:11.6
     volumes:
-      - ./drop_tables.sql:/docker-entrypoint-initdb.d/1-drop_tables.sql
-      - ./create_tables.sql:/docker-entrypoint-initdb.d/2-create_tables.sql
+      - ./settings/drop_tables.sql:/docker-entrypoint-initdb.d/1-drop_tables.sql
+      - ./settings/create_tables.sql:/docker-entrypoint-initdb.d/2-create_tables.sql
     environment:
       POSTGRES_DB: chainlink_test
       POSTGRES_PASSWORD: node
@@ -20,7 +20,7 @@ services:
       retries: 5
   node:
     container_name: chainlink-node-1
-    image: smartcontract/chainlink:latest
+    image: smartcontract/chainlink:$CHAINLINK_VERSION
     command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
     restart: always
     deploy:
@@ -41,7 +41,7 @@ services:
       - ETH_CHAIN_ID
       - LINK_CONTRACT_ADDRESS
     env_file:
-      - ./environment/chainlink-variables.env
+      - ./settings/chainlink-variables.env
     ports:
       - 6711:6688      
       - "6060:6060"
@@ -54,7 +54,7 @@ services:
       node-db:
         condition: service_healthy
     container_name: chainlink-node-2
-    image: smartcontract/chainlink:latest
+    image: smartcontract/chainlink:$CHAINLINK_VERSION
     command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
     restart: always    
     deploy:
@@ -72,7 +72,7 @@ services:
       - ETH_CHAIN_ID
       - LINK_CONTRACT_ADDRESS
     env_file:
-      - ./environment/chainlink-variables.env
+      - ./settings/chainlink-variables.env
     ports:
       - 6722:6688
       - 6062:6060      
@@ -85,7 +85,7 @@ services:
       node-db:
         condition: service_healthy
     container_name: chainlink-node-3
-    image: smartcontract/chainlink:latest
+    image: smartcontract/chainlink:$CHAINLINK_VERSION
     command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
     restart: always  
     deploy:
@@ -103,7 +103,7 @@ services:
       - ETH_CHAIN_ID
       - LINK_CONTRACT_ADDRESS
     env_file:
-      - ./environment/chainlink-variables.env
+      - ./settings/chainlink-variables.env
     ports:
       - 6733:6688
       - 6063:6060
@@ -116,7 +116,7 @@ services:
       node-db:
         condition: service_healthy
     container_name: chainlink-node-4
-    image: smartcontract/chainlink:latest
+    image: smartcontract/chainlink:$CHAINLINK_VERSION
     command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
     restart: always   
     deploy:
@@ -134,7 +134,7 @@ services:
       - ETH_CHAIN_ID
       - LINK_CONTRACT_ADDRESS
     env_file:
-      - ./environment/chainlink-variables.env
+      - ./settings/chainlink-variables.env
     ports:
       - 6744:6688 
       - 6064:6060     
@@ -147,7 +147,7 @@ services:
       node-db:
         condition: service_healthy
     container_name: chainlink-node-5
-    image: smartcontract/chainlink:latest
+    image: smartcontract/chainlink:$CHAINLINK_VERSION
     command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
     restart: always 
     deploy:
@@ -165,7 +165,7 @@ services:
       - ETH_CHAIN_ID
       - LINK_CONTRACT_ADDRESS
     env_file:
-      - ./environment/chainlink-variables.env
+      - ./settings/chainlink-variables.env
     ports:
       - 6755:6688 
       - 6065:6060   
@@ -175,8 +175,8 @@ services:
       - keystore       
 secrets:
   node_password:
-    file: ./environment/password.txt
+    file: ./settings/password.txt
   apicredentials:
-    file: ./environment/apicredentials
+    file: ./settings/apicredentials
   keystore:
-    file: ./environment/0xb90c7E3F7815F59EAD74e7543eB6D9E8538455D6.json
+    file: ./settings/0xb90c7E3F7815F59EAD74e7543eB6D9E8538455D6.json

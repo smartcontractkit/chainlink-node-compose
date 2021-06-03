@@ -3,14 +3,43 @@
 This compose script launches 5 chainlink nodes, and a single postgres DB that they all share. It's intended for testing
 and local development.
 
-## How To Run
+## Configuration
 
-There are 3 environment variables we leave up to you to deal with. You can set them in the
-`environmnet/chainlink-variables.env` or set them at runtime. Those 3 are
+There are 3 environment variables that you likely need to change. You can set them in the
+`.env` or set them at runtime. Those 3 are
 
-* ETH_CHAIN_ID
-* ETH_URL
-* LINK_CONTRACT_ADDRESS
+* `ETH_CHAIN_ID`
+* `ETH_URL`
+* `LINK_CONTRACT_ADDRESS` <- Hardhat will not have this preset, you'll need to launch your own LINK contract on a hardhat
+  network before launching your nodes. Or, if connecting to testnets, find the proper address
+  [here](https://docs.chain.link/docs/link-token-contracts/)
+
+The `.env` file assumes that you are running an instance of our local hardhat instance that simulates ethereum, which
+you can find [here](https://github.com/smartcontractkit/hardhat-network)).
+
+### If you do not set up a connection to a valid blockchain instance before running, the nodes will continuously error and fail
+
+## Running
+
+Once configured as desired, launch your chainlink nodes with
+
+`docker-compose up -d`
+
+### Node Locations
+
+| Node Number | Address               |
+| ----------- | --------------------- |
+| 1           | http://localhost:6711 |
+| 2           | http://localhost:6722 |
+| 3           | http://localhost:6733 |
+| 4           | http://localhost:6744 |
+| 5           | http://localhost:6755 |
+
+### Credentials
+
+**Email**: notreal@fakeemail.ch
+
+**Password**: twochains
 
 ## // TODO
 
