@@ -5,8 +5,8 @@ and local development.
 
 ## Configuration
 
-There are 3 environment variables that you likely need to change. You can set them in the
-`.env` or set them at runtime. Those 3 are
+There are 3 environment variables that you may need to change. You can set them in the
+`.env` file, those 3 are
 
 * `ETH_CHAIN_ID`
 * `ETH_URL`
@@ -15,7 +15,7 @@ There are 3 environment variables that you likely need to change. You can set th
   [here](https://docs.chain.link/docs/link-token-contracts/)
 
 The `.env` file assumes that you are running an instance of our local hardhat instance that simulates ethereum, which
-you can find [here](https://github.com/smartcontractkit/hardhat-network)).
+you can find [here](https://github.com/smartcontractkit/hardhat-network). Change them as necessary for other desired chains.
 
 ### If you do not set up a connection to a valid blockchain instance before running, the nodes will continuously error and fail
 
