@@ -1,6 +1,6 @@
 # Builds a chainlink environment based on the specified published docker image version
 
-version: '3.5'
+version: '3.8'
 services:
   node-db:
     container_name: chainlink-db
@@ -26,11 +26,6 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-    healthcheck:
-      test: tee | grep "Listening and serving HTTP on port 6688" -q
-      interval: 5s
-      timeout: 5s
-      retries: 5
     depends_on:
       node-db:
         condition: service_healthy
@@ -60,11 +55,6 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-    healthcheck:
-      test: tee | grep "Listening and serving HTTP on port 6688" -q
-      interval: 5s
-      timeout: 5s
-      retries: 5
     environment:      
       - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_2_test?sslmode=disable
       - LOG_LEVEL=info
@@ -91,11 +81,6 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-    healthcheck:
-      test: tee | grep "Listening and serving HTTP on port 6688" -q
-      interval: 5s
-      timeout: 5s
-      retries: 5
     environment:
       - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_3_test?sslmode=disable
       - LOG_LEVEL=info 
@@ -122,11 +107,6 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-    healthcheck:
-      test: tee | grep "Listening and serving HTTP on port 6688" -q
-      interval: 5s
-      timeout: 5s
-      retries: 5
     environment:
       - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_4_test?sslmode=disable
       - LOG_LEVEL=info
@@ -152,12 +132,7 @@ services:
     restart: always 
     deploy:
       restart_policy:
-        condition: on-failure
-    healthcheck:
-      test: tee | grep "Listening and serving HTTP on port 6688" -q
-      interval: 5s
-      timeout: 5s
-      retries: 5   
+        condition: on-failure 
     environment:
       - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_5_test?sslmode=disable
       - LOG_LEVEL=info
