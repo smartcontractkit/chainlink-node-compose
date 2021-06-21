@@ -5,16 +5,17 @@ and local development.
 
 ## Configuration
 
-There are 3 environment variables that you may need to change. You can set them in the
-`.env` file, those 3 are
+There are 4 environment variables that you may need to change. You can set them in the
+`.env` file, those 4 are
 
+* `CHAINLINK_VERSION`
 * `ETH_CHAIN_ID`
 * `ETH_URL`
 * `LINK_CONTRACT_ADDRESS` <- Hardhat will not have this preset, you'll need to launch your own LINK contract on a hardhat
   network before launching your nodes. Or, if connecting to testnets, find the proper address
   [here](https://docs.chain.link/docs/link-token-contracts/)
 
-The `.env` file assumes that you are running an instance of our local hardhat instance that simulates ethereum, which
+The `.env` file assumes that you are running an instance of our local hardhat setup that simulates ethereum, which
 you can find [here](https://github.com/smartcontractkit/hardhat-network). Change them as necessary for other desired chains.
 
 ### If you do not set up a connection to a valid blockchain instance before running, the nodes will continuously error and fail
@@ -40,6 +41,10 @@ Once configured as desired, launch your chainlink nodes with
 **Email**: notreal@fakeemail.ch
 
 **Password**: twochains
+
+## Kubernetes
+
+Check out the kubernetes folder for a K8s implementation of this setup. Still under development.
 
 ## // TODO
 

@@ -1,6 +1,6 @@
 # Builds a chainlink environment based on the specified published docker image version
 
-version: '3.8'
+version: '3.5'
 services:
   node-db:
     container_name: chainlink-db
@@ -27,8 +27,7 @@ services:
       restart_policy:
         condition: on-failure
     depends_on:
-      node-db:
-        condition: service_healthy
+      - "node-db"
     environment:
       - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_1_test?sslmode=disable
       - LOG_LEVEL=info
@@ -46,8 +45,7 @@ services:
       - keystore
   node-2:
     depends_on:
-      node-db:
-        condition: service_healthy
+      - "node-db"
     container_name: chainlink-node-2
     image: smartcontract/chainlink:$CHAINLINK_VERSION
     command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
@@ -72,8 +70,7 @@ services:
       - keystore       
   node-3:
     depends_on:
-      node-db:
-        condition: service_healthy
+      - "node-db"
     container_name: chainlink-node-3
     image: smartcontract/chainlink:$CHAINLINK_VERSION
     command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
@@ -98,8 +95,7 @@ services:
       - keystore    
   node-4:
     depends_on:
-      node-db:
-        condition: service_healthy
+      - "node-db"
     container_name: chainlink-node-4
     image: smartcontract/chainlink:$CHAINLINK_VERSION
     command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
@@ -124,8 +120,7 @@ services:
       - keystore    
   node-5:
     depends_on:
-      node-db:
-        condition: service_healthy
+      - "node-db"
     container_name: chainlink-node-5
     image: smartcontract/chainlink:$CHAINLINK_VERSION
     command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
