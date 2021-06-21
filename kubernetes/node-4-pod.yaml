@@ -1,0 +1,129 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-4
+spec:
+  containers:
+    - args:
+        - node
+        - start
+        - -d
+        - -p
+        - /etc/node-secrets-volume/node-password
+        - -a
+        - /etc/node-secrets-volume/apicredentials
+      env:
+        - name: DATABASE_URL
+          value: "postgresql://postgres:node@node-db:5432/chainlink_4_test?sslmode=disable"
+        - name: CHAINLINK_DB_NAME
+          value: chainlink_4_test
+        - name: ALLOW_ORIGINS
+          valueFrom:
+            configMapKeyRef:
+              key: ALLOW_ORIGINS
+              name: chainlink-env-variables
+        - name: CHAINLINK_DEV
+          valueFrom:
+            configMapKeyRef:
+              key: CHAINLINK_DEV
+              name: chainlink-env-variables
+        - name: CHAINLINK_PGPASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: CHAINLINK_PGPASSWORD
+              name: chainlink-env-variables
+        - name: CHAINLINK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: CHAINLINK_PORT
+              name: chainlink-env-variables
+        - name: CHAINLINK_TLS_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: CHAINLINK_TLS_PORT
+              name: chainlink-env-variables
+        - name: DEFAULT_HTTP_ALLOW_UNRESTRICTED_NETWORK_ACCESS
+          valueFrom:
+            configMapKeyRef:
+              key: DEFAULT_HTTP_ALLOW_UNRESTRICTED_NETWORK_ACCESS
+              name: chainlink-env-variables
+        - name: ENABLE_BULLETPROOF_TX_MANAGER
+          valueFrom:
+            configMapKeyRef:
+              key: ENABLE_BULLETPROOF_TX_MANAGER
+              name: chainlink-env-variables
+        - name: FEATURE_OFFCHAIN_REPORTING
+          valueFrom:
+            configMapKeyRef:
+              key: FEATURE_OFFCHAIN_REPORTING
+              name: chainlink-env-variables
+        - name: JSON_CONSOLE
+          valueFrom:
+            configMapKeyRef:
+              key: JSON_CONSOLE
+              name: chainlink-env-variables
+        - name: LOG_LEVEL
+          value: info
+        - name: MAX_EXPORT_HTML_THREADS
+          valueFrom:
+            configMapKeyRef:
+              key: MAX_EXPORT_HTML_THREADS
+              name: chainlink-env-variables
+        - name: MINIMUM_CONTRACT_PAYMENT
+          valueFrom:
+            configMapKeyRef:
+              key: MINIMUM_CONTRACT_PAYMENT
+              name: chainlink-env-variables
+        - name: OCR_TRACE_LOGGING
+          valueFrom:
+            configMapKeyRef:
+              key: OCR_TRACE_LOGGING
+              name: chainlink-env-variables
+        - name: P2P_LISTEN_IP
+          valueFrom:
+            configMapKeyRef:
+              key: P2P_LISTEN_IP
+              name: chainlink-env-variables
+        - name: P2P_LISTEN_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: P2P_LISTEN_PORT
+              name: chainlink-env-variables
+        - name: ROOT
+          valueFrom:
+            configMapKeyRef:
+              key: ROOT
+              name: chainlink-env-variables
+        - name: SECURE_COOKIES
+          valueFrom:
+            configMapKeyRef:
+              key: SECURE_COOKIES
+              name: chainlink-env-variables
+      image: 'smartcontract/chainlink:0.10.7'
+      name: chainlink-node-4
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 6688
+        initialDelaySeconds: 30
+        periodSeconds: 10
+      startupProbe:
+        httpGet:
+          path: /
+          port: 6688
+        initialDelaySeconds: 60
+        failureThreshold: 5
+        periodSeconds: 10 
+      ports:
+        - containerPort: 6688
+        - containerPort: 6060
+      resources: {}
+      volumeMounts:
+        - mountPath: /etc/node-secrets-volume/
+          name: node-secrets-volume
+  restartPolicy: OnFailure
+  volumes:
+    - name: node-secrets-volume
+      secret:
+        secretName: node-secrets
+status: {}

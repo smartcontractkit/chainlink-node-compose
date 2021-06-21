@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chainlink-env-variables
+data:
+    CHAINLINK_PGPASSWORD: "node"
+    CHAINLINK_DEV: "true"
+    CHAINLINK_TLS_PORT: "0"
+    SECURE_COOKIES: "false"
+    ALLOW_ORIGINS: "*"
+    ENABLE_BULLETPROOF_TX_MANAGER: "true"
+    MINIMUM_CONTRACT_PAYMENT: "0"
+    MAX_EXPORT_HTML_THREADS: "2"
+    JSON_CONSOLE: "false"
+    CHAINLINK_PORT: "6688"
+    ROOT: "./clroot"
+    FEATURE_OFFCHAIN_REPORTING: "true"
+    OCR_TRACE_LOGGING: "true"
+    P2P_LISTEN_IP: "0.0.0.0"
+    P2P_LISTEN_PORT: "6690"
+    DEFAULT_HTTP_ALLOW_UNRESTRICTED_NETWORK_ACCESS: "true"
