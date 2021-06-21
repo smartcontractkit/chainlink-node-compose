@@ -44,7 +44,7 @@ Once configured as desired, launch your chainlink nodes with
 
 ## Kubernetes
 
-Check out the kubernetes folder for a K8s implementation of this setup. Still under development.
+Check out the `kubernetes` folder for a K8s implementation of this setup. Still under development.
 
 ## // TODO
 
