@@ -4,8 +4,8 @@ metadata:
   name: node-1
 spec:
   ports:
-    - name: "6711"
-      port: 6711
+    - name: "6688"
+      port: 6688
       targetPort: 6688
     - name: "6060"
       port: 6060

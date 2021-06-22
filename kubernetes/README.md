@@ -1,8 +1,8 @@
 # Kubernetes
 
-Here is the kubernetes version of `chainlink-node-compose`.
+Launches a kubernetes cluster of 5 chainlink nodes and 1 postgres DB.
 
-## How to Run / Deploy
+## Access Nodes
 
-1. Setup a K8s cluster, we use `minikube` a lot for local testing.
-2. `kubectl apply -f .`
+Use `kubectl get pods` to find the IP addresses of the chainlink nodes. You can then connect to them using
+`<ip-address>:6688`
