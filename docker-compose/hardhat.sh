@@ -1,4 +1,4 @@
-CHAINLINK_VERSION=0.10.7
+export CHAINLINK_VERSION="0.10.7"
 # Local Hardhat network defaults
 ETH_CHAIN_ID=31337
 ETH_URL=ws://host.docker.internal:8545
