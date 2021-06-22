@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-4
+spec:
+  ports:
+    - name: "6688"
+      port: 6688
+      targetPort: 6688
+    - name: "6064"
+      port: 6064
+      targetPort: 6060
+

@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: node-db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: chainlink_test
+            - name: POSTGRES_PASSWORD
+              value: node
+            - name: PGPASSWORD
+              value: node
+          image: postgres:11.6
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", /opt/poststart.sh ]
+          livenessProbe:
+            exec:
+              command: ["psql", "-U", "postgres", "-d", "chainlink_1_test", "-c", "SELECT 1"]
+            periodSeconds: 60
+            initialDelaySeconds: 60
+          startupProbe:
+            exec:
+              command: ["psql", "-U", "postgres", "-d", "chainlink_1_test", "-c", "SELECT 1"]
+            periodSeconds: 15
+            failureThreshold: 5
+            initialDelaySeconds: 15
+          name: chainlink-db
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgresdb
+            - mountPath: /opt/poststart.sh
+              subPath: poststart.sh
+              name: hookvolume
+      restartPolicy: Always
+      volumes:
+        - name: postgresdb
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+        - name: hookvolume
+          configMap:
+            name: poststarthook
+            defaultMode: 0755 
+status: {}
