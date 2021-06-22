@@ -99,7 +99,7 @@ spec:
             configMapKeyRef:
               key: SECURE_COOKIES
               name: chainlink-env-variables
-      image: 'smartcontract/chainlink:0.10.7'
+      image: 'smartcontract/chainlink:0.10.8'
       name: chainlink-node-3
       livenessProbe:
         httpGet:

@@ -1,6 +1,8 @@
 # Docker Compose
 
-Uses a basic `docker-compose` setup to launch 5 chainlink nodes and a single postgres DB.
+Uses a basic `docker-compose` setup to launch 5 chainlink nodes and a single postgres DB. This assumes that you are
+already running a local instance of hardhat. You can get one from our handy
+[docker container](https://github.com/smartcontractkit/hardhat-network).
 
 ## Node Access
 

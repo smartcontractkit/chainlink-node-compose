@@ -7,24 +7,7 @@ and 5 chainlink nodes that all connect to it.
 
 ## Running
 
-`./deploy.sh <deployment-type> <blockchain-selection> <chainlink-version>`
-
-### Deployment Types
-
-* `d` : local docker-compose script, see the docker-compose folder for more details
-* `k` : kubernetes deployment, see the kubernetes folder for more details
-
-### Blockchain Selections
-
-* `hardhat` : assumes a local hardhat instance is running on port 8585
-* `kovan`   : connects to the kovan testnet
-* `goerli`  : connects to the goerli testnet
-
-### Chainlink Version
-
-* `mix`    : A mix of chainlink versions, each node will have one of the latest 5 major versions
-* `latest` : All chainlink nodes are set to the latest release version
-* `0.xx.x` : Choose your version, must be a valid docker-hub tag
+Running depends on which deployment you'd like to use, see the folders for more info.
 
 ## Accessing Nodes
 
