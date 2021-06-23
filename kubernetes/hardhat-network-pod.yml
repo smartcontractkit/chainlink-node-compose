@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: Pod
-metadata:
-  name: hardhat-network
-spec:
-  containers:
-    - name: "hardhat-network"
-      image: "smartcontract/hardhat-network"
-      resources: {}

@@ -5,8 +5,7 @@ metadata:
 spec:
   ports:
     - name: "8545"
-      port: 6688
-      targetPort: 6688
-    - name: "6060"
-      port: 6060
-      targetPort: 6060
+      port: 8545
+      targetPort: 8545
+  selector:
+    app: hardhat-network

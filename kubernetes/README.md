@@ -1,6 +1,7 @@
 # Kubernetes
 
-Launches a Kubernetes cluster of 5 chainlink nodes and 1 postgres DB. This assumes you have K8s environment going already.
+Launches a Kubernetes cluster of 5 chainlink nodes and 1 postgres DB, along with a simulated hardhat blockchain.
+This assumes you have K8s environment going already.
 
 ## Run
 

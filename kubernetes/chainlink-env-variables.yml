@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: chainlink-env-variables
 data:
-    ETH_URL: "ws:/hardhat-network:8545"
+    ETH_URL: "ws://hardhat-network:8545"
     ETH_CHAIN_ID: "31337"
     CHAINLINK_PGPASSWORD: "node"
     CHAINLINK_DEV: "true"

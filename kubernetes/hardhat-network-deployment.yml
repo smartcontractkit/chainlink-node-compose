@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hardhat-network
+spec:
+  selector:
+    matchLabels:
+      app: hardhat-network
+  template:
+    metadata:
+      labels:
+        app: hardhat-network
+    spec:
+      containers:
+      - name: hardhat-network
+        image: "smartcontract/hardhat-network"
+        resources: {}
+        ports:
+        - containerPort: 8545
