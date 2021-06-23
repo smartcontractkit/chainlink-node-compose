@@ -17,6 +17,16 @@ spec:
           value: "postgresql://postgres:node@node-db:5432/chainlink_1_test?sslmode=disable"
         - name: CHAINLINK_DB_NAME
           value: chainlink_1_test
+        - name: ETH_URL
+          valueFrom:
+            configMapKeyRef:
+              key: ETH_URL
+              name: chainlink-env-variables
+        - name: ETH_CHAIN_ID
+          valueFrom:
+            configMapKeyRef:
+              key: ETH_CHAIN_ID
+              name: chainlink-env-variables
         - name: ALLOW_ORIGINS
           valueFrom:
             configMapKeyRef:
