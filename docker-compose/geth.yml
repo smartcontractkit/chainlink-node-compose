@@ -2,8 +2,12 @@
 
 version: '3.5'
 volumes:
-  prometheus_data: {}
+  prometheus_data: { }
 services:
+  eth_client:
+    extends:
+      file: services.yml
+      service: geth
   prometheus:
     extends:
       file: services.yml
