@@ -1,0 +1,149 @@
+version: '3.5'
+volumes:
+  prometheus_data: { }
+services:
+  hardhat:
+    image: smartcontract/hardhat-network:latest
+    restart: always
+    volumes:
+      - ./hh/hardhat.config.js:/usr/app/hardhat.config.js:ro
+    ports:
+      - "8545:8545"
+  geth:
+    image: ethereum/client-go:v1.10.3
+    restart: always
+    volumes:
+      - ./ethconfig/password:/root/ethconfig/password:ro
+      - ./ethconfig/genesis.json:/root/ethconfig/genesis.json:ro
+      - ./ethconfig/init.sh:/root/init.sh:rw
+      - ./ethconfig/password.txt:/root/password.txt:rw
+      - ./ethconfig/keystore:/root/.ethereum/devchain/keystore:rw
+    ports:
+      - "30303:30303"
+      - "30303:30303/udp"
+      - "8544:8544"
+      - "8545:8545"
+    entrypoint: sh ./root/init.sh
+    command: |
+      --dev
+      --dev.period 1
+      --password /root/password.txt
+      --datadir /root/.ethereum/devchain
+      --unlock 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+      --unlock 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+      --unlock 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+      --unlock 0x90F79bf6EB2c4f870365E785982E1f101E93b906
+      --unlock 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+      --unlock 0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc
+      --unlock 0x976EA74026E726554dB657fA54763abd0C3a0aa9
+      --unlock 0x14dC79964da2C08b23698B3D3cc7Ca32193d9955
+      --unlock 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f
+      --unlock 0xa0Ee7A142d267C1f36714E4a8F75612F20a79720
+      --unlock 0xBcd4042DE499D14e55001CcbB24a551F3b954096
+      --unlock 0x71bE63f3384f5fb98995898A86B02Fb2426c5788
+      --unlock 0xFABB0ac9d68B0B445fB7357272Ff202C5651694a
+      --unlock 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+      --unlock 0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097
+      --unlock 0xcd3B766CCDd6AE721141F452C550Ca635964ce71
+      --unlock 0x2546BcD3c84621e976D8185a91A922aE77ECEc30
+      --unlock 0xbDA5747bFD65F08deb54cb465eB87D40e51B197E
+      --unlock 0xdD2FD4581271e230360230F9337D5c0430Bf44C0
+      --unlock 0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199
+      --networkid=1337
+      --mine
+      --miner.threads 1
+      --miner.etherbase 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+      --rpcapi="admin,debug,web3,eth,txpool,personal,clique,miner,net"
+      --ipcdisable
+      --http
+      --http.addr 0.0.0.0
+      --http.port=8544
+      --ws
+      --ws.origins "*"
+      --ws.addr 0.0.0.0
+      --ws.port=8545
+      --graphql
+      --graphql.corsdomain "*"
+      --allow-insecure-unlock
+      --rpc.allow-unprotected-txs
+      --http.corsdomain "*"
+      --vmdebug
+
+  node_exporter:
+    image: prom/node-exporter:v1.1.2
+    container_name: node_exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: always
+    ports:
+      - 9100:9100
+  prometheus:
+    image: prom/prometheus:main
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    restart: always
+    ports:
+      - 9090:9090
+  node-db:
+    container_name: chainlink-db
+    image: postgres:11.6
+    command: postgres -c 'max_connections=${PG_MAX_CONNECTIONS}'
+    volumes:
+      - ./settings/drop_tables.sql:/docker-entrypoint-initdb.d/1-drop_tables.sql
+      - ./settings/create_tables.sql:/docker-entrypoint-initdb.d/2-create_tables.sql
+    environment:
+      POSTGRES_DB: chainlink_test
+      POSTGRES_PASSWORD: node
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  node:
+    container_name: chainlink-node-1
+    image: $CHAINLINK_IMAGE:$CHAINLINK_VERSION
+    command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
+    restart: always
+    deploy:
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - "node-db"
+      - "eth_client"
+    environment:
+      - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_1_test?sslmode=disable
+      - LOG_LEVEL=info
+      - ETH_URL
+      - ETH_CHAIN_ID
+      - LINK_CONTRACT_ADDRESS
+    env_file:
+      - ./settings/chainlink-variables.env
+    ports:
+      - 6711:6688
+      - "6060:6060"
+    secrets:
+      - node_password
+      - apicredentials
+      - keystore
+secrets:
+  node_password:
+    file: ./settings/password.txt
+  apicredentials:
+    file: ./settings/apicredentials
+  keystore:
+    file: ./settings/0xb90c7E3F7815F59EAD74e7543eB6D9E8538455D6.json
