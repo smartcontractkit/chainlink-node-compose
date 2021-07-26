@@ -117,7 +117,7 @@ services:
   node:
     container_name: chainlink-node-1
     image: $CHAINLINK_IMAGE:$CHAINLINK_VERSION
-    command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials
+    command: node start -d -p /run/secrets/node_password -a /run/secrets/apicredentials --vrfpassword=/run/secrets/apicredentials
     restart: always
     deploy:
       restart_policy:
