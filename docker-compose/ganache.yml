@@ -1,0 +1,79 @@
+# Builds a chainlink environment based on the specified published docker image version
+
+version: '3.5'
+volumes:
+  prometheus_data: { }
+services:
+  eth_client:
+    extends:
+      file: services.yml
+      service: ganache
+  prometheus:
+    extends:
+      file: services.yml
+      service: prometheus
+  node_expoter:
+    extends:
+      file: services.yml
+      service: node_exporter
+  node-db:
+    extends:
+      file: services.yml
+      service: node-db
+  node:
+    extends:
+      file: services.yml
+      service: node
+    container_name: chainlink-node-1
+    environment:
+      - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_1_test?sslmode=disable
+    ports:
+      - 6711:6688
+      - "6060:6060"
+  node-2:
+    extends:
+      file: services.yml
+      service: node
+    container_name: chainlink-node-2
+    environment:
+      - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_2_test?sslmode=disable
+    ports:
+      - 6722:6688
+      - 6062:6060
+  node-3:
+    extends:
+      file: services.yml
+      service: node
+    container_name: chainlink-node-3
+    environment:
+      - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_3_test?sslmode=disable
+    ports:
+      - 6733:6688
+      - 6063:6060
+  node-4:
+    extends:
+      file: services.yml
+      service: node
+    container_name: chainlink-node-4
+    environment:
+      - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_4_test?sslmode=disable
+    ports:
+      - 6744:6688
+      - 6064:6060
+  node-5:
+    extends:
+      file: services.yml
+      service: node
+    container_name: chainlink-node-5
+    environment:
+      - DATABASE_URL=postgresql://postgres:node@node-db:5432/chainlink_5_test?sslmode=disable
+    ports:
+      - 6755:6688
+      - 6065:6060
+secrets:
+  node_password:
+    file: ./settings/password.txt
+  apicredentials:
+    file: ./settings/apicredentials
+  keystore:
+    file: ./settings/0xb90c7E3F7815F59EAD74e7543eB6D9E8538455D6.json
