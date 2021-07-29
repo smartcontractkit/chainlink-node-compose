@@ -2,6 +2,13 @@ version: '3.5'
 volumes:
   prometheus_data: { }
 services:
+  explorer_stub:
+    image: explorer_stub:latest
+    container_name: explorer_stub
+    build:
+      context: ../explorer
+    ports:
+     - "4321:4321"
   ganache:
     image: trufflesuite/ganache-cli:latest
     container_name: ganache

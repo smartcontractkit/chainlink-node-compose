@@ -4,6 +4,10 @@ version: '3.5'
 volumes:
   prometheus_data: { }
 services:
+  explorer_stub:
+    extends:
+      file: services.yml
+      service: explorer_stub
   eth_client:
     extends:
       file: services.yml
